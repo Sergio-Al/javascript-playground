@@ -8,4 +8,4 @@ function compose(f, g) {
 const leftShift = (x, y) => x << y;
 const square = (x) => x * x;
 const res = compose(square, leftShift)(2, 2);
-console.log(res);
+console.log(res); // 64

@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>SSE Chat</title>
+  </head>
+  <body>
+    <h1>SSE Based Chat</h1>
+    <h2 class="usernick">User:</h2>
+    <input
+      id="input"
+      style="width: 100%; padding: 10px; border: solid black 2px"
+    />
+    <script>
+      let nick = prompt("Enter your nickname");
+      let input = document.getElementById("input");
+      let nickElement = document.querySelector("h2.usernick");
+
+      nickElement.textContent = `User: ${nick}`;
+      input.focus();
+
+      let chat = new EventSource("/chat");
+      chat.addEventListener("chat", (event) => {
+        let div = document.createElement("div");
+        div.append(event.data);
+        input.before(div);
+        input.scrollIntoView();
+      });
+
+      input.addEventListener("change", () => {
+        fetch("/chat", {
+          method: "POST",
+          body: nick + ": " + input.value,
+        }).catch((e) => console.error);
+        input.value = "";
+      });
+    </script>
+  </body>
+</html>
